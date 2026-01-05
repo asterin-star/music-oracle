@@ -343,6 +343,8 @@ async function init() {
       sessionRestored = true;
     } catch (error) {
       console.error("Error restoring session:", error);
+      alert("No pudimos restaurar tu sesión de Spotify. Conéctate de nuevo.");
+      showView("landing-view");
     }
   }
 
