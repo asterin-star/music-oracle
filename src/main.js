@@ -316,6 +316,8 @@ function renderEsotericResults(analysis, insights) {
 
 // ========== INITIALIZATION ==========
 async function init() {
+  let sessionRestored = false;
+
   // Check for OAuth callback
   const urlParams = new URLSearchParams(window.location.search);
   if (urlParams.has("code")) {
@@ -323,7 +325,7 @@ async function init() {
       const handled = await SpotifyAuth.handleCallback();
       if (handled) {
         await processSpotifyData();
-        return;
+        sessionRestored = true;
       }
     } catch (error) {
       console.error("Callback error:", error);
@@ -331,13 +333,18 @@ async function init() {
     }
   }
 
-  // Check if already authenticated
-  if (SpotifyAuth.isAuthenticated()) {
-    console.log("User already authenticated");
-  }
-
   // Initialize theme
   initTheme();
+
+  // Check if already authenticated
+  if (!sessionRestored && SpotifyAuth.isAuthenticated()) {
+    try {
+      await processSpotifyData();
+      sessionRestored = true;
+    } catch (error) {
+      console.error("Error restoring session:", error);
+    }
+  }
 
   // Setup event listeners
   document

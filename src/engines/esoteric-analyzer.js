@@ -165,7 +165,7 @@ export function bpmNumerology(bpm) {
 /**
  * Full esoteric analysis of a track
  */
-export function esoter icAnalysis(track, audioFeatures) {
+export function esotericAnalysis(track, audioFeatures) {
   const tempo = Math.round(audioFeatures.tempo);
   const energy = audioFeatures.energy;
   const valence = audioFeatures.valence;

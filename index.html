@@ -76,6 +76,9 @@
       #landing-view .logo {
         font-size: 10rem;
         user-select: none;
+        position: relative;
+        -webkit-text-stroke: 4px rgba(255, 255, 255, 0.08);
+        text-shadow: 0 0 0 rgba(0, 0, 0, 0.45), 0 0 12px rgba(0, 0, 0, 0.35);
         animation: pulseglow 3.5s infinite ease-in-out;
       }
 
@@ -86,11 +89,23 @@
           filter: drop-shadow(0 0 35px hsl(var(--hue-primary), 70%, 60%))
             drop-shadow(0 0 70px hsl(var(--hue-primary), 70%, 60%));
         }
+        12.5% {
+          transform: scale(1.01);
+          opacity: 0.98;
+          filter: drop-shadow(0 0 38px hsl(var(--hue-primary), 72%, 62%))
+            drop-shadow(0 0 76px hsl(var(--hue-primary), 72%, 62%));
+        }
         25% {
           transform: scale(1.02);
           opacity: 0.95;
           filter: drop-shadow(0 0 40px hsl(var(--hue-primary), 75%, 65%))
             drop-shadow(0 0 80px hsl(var(--hue-primary), 75%, 65%));
+        }
+        37.5% {
+          transform: scale(1.03);
+          opacity: 0.94;
+          filter: drop-shadow(0 0 42px hsl(var(--hue-primary), 76%, 63%))
+            drop-shadow(0 0 84px hsl(var(--hue-primary), 76%, 63%));
         }
         50% {
           transform: scale(1.04);
@@ -98,11 +113,23 @@
           filter: drop-shadow(0 0 45px hsl(var(--hue-accent), 65%, 55%))
             drop-shadow(0 0 90px hsl(var(--hue-accent), 65%, 55%));
         }
+        62.5% {
+          transform: scale(1.03);
+          opacity: 0.94;
+          filter: drop-shadow(0 0 42px hsl(var(--hue-primary), 76%, 63%))
+            drop-shadow(0 0 84px hsl(var(--hue-primary), 76%, 63%));
+        }
         75% {
           transform: scale(1.02);
           opacity: 0.95;
           filter: drop-shadow(0 0 40px hsl(var(--hue-primary), 75%, 65%))
             drop-shadow(0 0 80px hsl(var(--hue-primary), 75%, 65%));
+        }
+        87.5% {
+          transform: scale(1.01);
+          opacity: 0.98;
+          filter: drop-shadow(0 0 38px hsl(var(--hue-primary), 72%, 62%))
+            drop-shadow(0 0 76px hsl(var(--hue-primary), 72%, 62%));
         }
         100% {
           transform: scale(1);
