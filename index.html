@@ -1,0 +1,656 @@
+<!DOCTYPE html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Music Oracle - Descubre la Frecuencia de tu Alma</title>
+
+    <!-- SEO Meta Tags -->
+    <meta
+      name="description"
+      content="Analiza tus gustos musicales de Spotify y descubre la frecuencia espiritual de tu alma. IA + Numerología + Música."
+    />
+    <meta name="theme-color" content="#1a1a2e" />
+
+    <!-- Design System -->
+    <link rel="stylesheet" href="/css/design-system.css" />
+
+    <style>
+      /* === Layout Container === */
+      #app {
+        min-height: 100vh;
+        position: relative;
+        z-index: var(--z-content);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: var(--space-md);
+      }
+
+      /* === View Sections === */
+      .view {
+        width: 100%;
+        max-width: 600px;
+        text-align: center;
+      }
+
+      /* === Theme Toggle === */
+      .theme-toggle {
+        position: fixed;
+        top: var(--space-lg);
+        right: var(--space-lg);
+        z-index: var(--z-overlay);
+        background: var(--glass-tint);
+        backdrop-filter: blur(var(--glass-blur));
+        -webkit-backdrop-filter: blur(var(--glass-blur));
+        border: 1px solid var(--glass-border);
+        border-radius: 50%;
+        width: 56px;
+        height: 56px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
+        font-size: 1.75rem;
+        transition: all var(--transition-smooth);
+        user-select: none;
+      }
+
+      .theme-toggle:hover {
+        transform: scale(1.1) rotate(15deg);
+        background: hsla(240, 15%, 20%, 0.85);
+        border-color: var(--color-primary);
+      }
+
+      /* === Landing View === */
+      #landing-view {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: var(--space-xl);
+        justify-content: center;
+        min-height: 100vh;
+        transform: translateY(var(--landing-offset));
+      }
+
+      #landing-view .logo {
+        font-size: 10rem;
+        user-select: none;
+        animation: pulseglow 3.5s infinite ease-in-out;
+      }
+
+      @keyframes pulseglow {
+        0% {
+          transform: scale(1);
+          opacity: 1;
+          filter: drop-shadow(0 0 35px hsl(var(--hue-primary), 70%, 60%))
+            drop-shadow(0 0 70px hsl(var(--hue-primary), 70%, 60%));
+        }
+        25% {
+          transform: scale(1.02);
+          opacity: 0.95;
+          filter: drop-shadow(0 0 40px hsl(var(--hue-primary), 75%, 65%))
+            drop-shadow(0 0 80px hsl(var(--hue-primary), 75%, 65%));
+        }
+        50% {
+          transform: scale(1.04);
+          opacity: 0.92;
+          filter: drop-shadow(0 0 45px hsl(var(--hue-accent), 65%, 55%))
+            drop-shadow(0 0 90px hsl(var(--hue-accent), 65%, 55%));
+        }
+        75% {
+          transform: scale(1.02);
+          opacity: 0.95;
+          filter: drop-shadow(0 0 40px hsl(var(--hue-primary), 75%, 65%))
+            drop-shadow(0 0 80px hsl(var(--hue-primary), 75%, 65%));
+        }
+        100% {
+          transform: scale(1);
+          opacity: 1;
+          filter: drop-shadow(0 0 35px hsl(var(--hue-primary), 70%, 60%))
+            drop-shadow(0 0 70px hsl(var(--hue-primary), 70%, 60%));
+        }
+      }
+
+      #landing-view .main-action {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: var(--space-md);
+        width: 100%;
+      }
+
+      /* Spotify Button */
+      .btn-spotify {
+        width: 100%;
+        max-width: 380px;
+        padding: 1.6rem 3rem;
+        font-family: var(--font-body);
+        font-size: 1.25rem;
+        font-weight: 800;
+        letter-spacing: -0.02em;
+
+        background: linear-gradient(135deg, #1db954 0%, #1ed760 100%);
+        color: white;
+        border: none;
+        border-radius: 50px;
+        cursor: pointer;
+        transition: all var(--transition-smooth);
+        box-shadow: 0 10px 28px hsla(120, 76%, 50%, 0.45);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 0.75rem;
+        position: relative;
+        overflow: hidden;
+      }
+
+      .btn-spotify::before {
+        content: "";
+        position: absolute;
+        top: 0;
+        left: -100%;
+        width: 100%;
+        height: 100%;
+        background: linear-gradient(
+          90deg,
+          transparent,
+          rgba(255, 255, 255, 0.35),
+          transparent
+        );
+        transition: left 0.6s;
+      }
+
+      .btn-spotify:hover::before {
+        left: 100%;
+      }
+
+      .btn-spotify:hover {
+        transform: translateY(-5px) scale(1.03);
+        box-shadow: 0 15px 40px hsla(120, 76%, 50%, 0.65);
+      }
+
+      .btn-spotify:active {
+        transform: translateY(-2px) scale(1.01);
+      }
+
+      .spotify-logo {
+        width: 24px;
+        height: 24px;
+        filter: brightness(0) invert(1);
+      }
+
+      .btn-text {
+        font-size: 1.15rem;
+        font-weight: 600;
+        letter-spacing: -0.01em;
+      }
+
+      /* === Image Upload Area === */
+      .upload-area {
+        width: 100%;
+        max-width: 380px;
+        margin-top: var(--space-xs);
+      }
+
+      .upload-hint {
+        font-size: 0.8rem;
+        color: var(--color-text-dim);
+        margin-bottom: var(--space-sm);
+        opacity: 0.8;
+      }
+
+      .dropzone {
+        border: 2px dashed var(--glass-border);
+        border-radius: var(--radius-lg);
+        padding: var(--space-lg);
+        background: var(--glass-tint);
+        backdrop-filter: blur(var(--glass-blur));
+        -webkit-backdrop-filter: blur(var(--glass-blur));
+        cursor: pointer;
+        transition: all var(--transition-smooth);
+        position: relative;
+      }
+
+      .dropzone:hover,
+      .dropzone.dragover {
+        border-color: var(--color-primary);
+        background: hsla(var(--hue-primary), 70%, 60%, 0.12);
+        transform: scale(1.02);
+      }
+
+      .dropzone-content {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: var(--space-xs);
+      }
+
+      .dropzone-icon {
+        font-size: 2.5rem;
+        opacity: 0.65;
+      }
+
+      .dropzone-text {
+        font-size: 0.9rem;
+        color: var(--color-text-dim);
+        font-weight: 500;
+      }
+
+      .dropzone-subtext {
+        font-size: 0.75rem;
+        color: var(--color-text-dim);
+        opacity: 0.65;
+      }
+
+      #file-input {
+        display: none;
+      }
+
+      .preview-container {
+        margin-top: var(--space-md);
+        display: none;
+      }
+
+      .preview-container.visible {
+        display: block;
+      }
+
+      .preview-image {
+        max-width: 100%;
+        max-height: 200px;
+        border-radius: var(--radius-md);
+        box-shadow: var(--glass-shadow);
+      }
+
+      .remove-image {
+        margin-top: var(--space-sm);
+        padding: 0.5rem 1rem;
+        font-size: 0.875rem;
+        background: transparent;
+        color: var(--color-text-dim);
+        border: 1px solid var(--glass-border);
+        border-radius: var(--radius-sm);
+        cursor: pointer;
+        transition: all var(--transition-fast);
+      }
+
+      .remove-image:hover {
+        background: hsla(0, 70%, 60%, 0.2);
+        border-color: hsl(0, 70%, 60%);
+        color: hsl(0, 70%, 70%);
+      }
+
+      /* === Search Component === */
+      .search-container {
+        width: 100%;
+        max-width: 380px;
+        margin-top: var(--space-md);
+        position: relative;
+      }
+
+      .search-divider {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin-bottom: var(--space-sm);
+        color: var(--color-text-dim);
+        font-size: 0.8rem;
+        opacity: 0.7;
+      }
+
+      .search-divider::before,
+      .search-divider::after {
+        content: "";
+        height: 1px;
+        background: var(--glass-border);
+        flex: 1;
+        margin: 0 var(--space-sm);
+      }
+
+      .search-box {
+        background: var(--glass-tint);
+        border: 1px solid var(--glass-border);
+        border-radius: 50px;
+        padding: 0.8rem 1.2rem;
+        display: flex;
+        align-items: center;
+        gap: var(--space-sm);
+        transition: all var(--transition-smooth);
+      }
+
+      .search-box:focus-within {
+        background: hsla(240, 15%, 20%, 0.8);
+        border-color: var(--color-primary);
+        box-shadow: 0 0 20px hsla(var(--hue-primary), 70%, 60%, 0.2);
+        transform: translateY(-2px);
+      }
+
+      .search-icon {
+        opacity: 0.6;
+      }
+
+      #song-search {
+        background: transparent;
+        border: none;
+        color: var(--color-text);
+        width: 100%;
+        font-family: var(--font-body);
+        font-size: 1rem;
+        outline: none;
+      }
+
+      #song-search::placeholder {
+        color: var(--color-text-dim);
+      }
+
+      .search-results {
+        position: absolute;
+        top: 100%;
+        left: 0;
+        width: 100%;
+        margin-top: var(--space-xs);
+        background: rgba(20, 20, 35, 0.95);
+        backdrop-filter: blur(20px);
+        -webkit-backdrop-filter: blur(20px);
+        border: 1px solid var(--glass-border);
+        border-radius: var(--radius-md);
+        max-height: 300px;
+        overflow-y: auto;
+        z-index: 1000;
+        box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5);
+      }
+
+      .search-result-item {
+        padding: var(--space-sm);
+        display: flex;
+        align-items: center;
+        gap: var(--space-sm);
+        cursor: pointer;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+        transition: background 0.2s;
+      }
+
+      .search-result-item:last-child {
+        border-bottom: none;
+      }
+
+      .search-result-item:hover {
+        background: hsla(var(--hue-primary), 70%, 60%, 0.2);
+      }
+
+      .track-thumb {
+        width: 40px;
+        height: 40px;
+        border-radius: 4px;
+        object-fit: cover;
+      }
+
+      .track-info {
+        flex: 1;
+        text-align: left;
+      }
+
+      .track-name {
+        font-weight: 600;
+        font-size: 0.9rem;
+        color: var(--color-text);
+      }
+
+      .track-artist {
+        font-size: 0.8rem;
+        color: var(--color-text-dim);
+      }
+
+      /* === Loading View === */
+      #loading-view {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: var(--space-lg);
+      }
+
+      #loading-view .progress-text {
+        font-size: 1.125rem;
+        color: var(--color-primary);
+      }
+
+      /* === Results View === */
+      #results-view .mystic-card {
+        background: var(--glass-tint);
+        backdrop-filter: blur(var(--glass-blur));
+        -webkit-backdrop-filter: blur(var(--glass-blur));
+        border: 1px solid var(--glass-border);
+        border-radius: var(--radius-xl);
+        padding: var(--space-xl);
+        box-shadow: var(--glass-shadow);
+        margin-bottom: var(--space-lg);
+      }
+
+      #results-view .profile-title {
+        font-family: var(--font-display);
+        font-style: italic;
+        font-weight: 700;
+        font-size: 2.5rem;
+        margin-bottom: var(--space-lg);
+        background: var(--gradient-primary);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+      }
+
+      #results-view .insights {
+        text-align: left;
+        line-height: 1.8;
+      }
+
+      #results-view .stat-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+        gap: var(--space-md);
+        margin: var(--space-lg) 0;
+      }
+
+      .stat-card {
+        background: hsla(240, 15%, 20%, 0.5);
+        padding: var(--space-md);
+        border-radius: var(--radius-md);
+        border: 1px solid var(--glass-border);
+      }
+
+      .stat-icon {
+        font-size: 2rem;
+        margin-bottom: var(--space-xs);
+      }
+
+      .stat-label {
+        font-size: 0.875rem;
+        color: var(--color-text-dim);
+        margin-bottom: var(--space-xs);
+      }
+
+      .stat-value {
+        font-size: 1.25rem;
+        font-weight: 700;
+        color: var(--color-primary);
+      }
+
+      /* === Share View === */
+      #share-view {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: var(--space-lg);
+      }
+
+      #share-canvas {
+        max-width: 100%;
+        border-radius: var(--radius-lg);
+        box-shadow: var(--glass-shadow);
+      }
+
+      /* === Responsive === */
+      @media (max-width: 768px) {
+        #landing-view .logo {
+          font-size: 7rem;
+        }
+
+        .btn-spotify {
+          max-width: 100%;
+          padding: 1.2rem 2rem;
+          font-size: 1.2rem;
+        }
+
+        .theme-toggle {
+          width: 48px;
+          height: 48px;
+          font-size: 1.5rem;
+        }
+
+        .view {
+          max-width: 100%;
+        }
+      }
+    </style>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400;1,700&family=Inter:wght@400;500;600;800&display=swap"
+      rel="stylesheet"
+    />
+  </head>
+  <body>
+    <!-- Theme Toggle -->
+    <div class="theme-toggle" id="theme-toggle" title="Toggle theme">
+      <span id="theme-icon">🌙</span>
+    </div>
+
+    <!-- Liquified Background -->
+    <div class="liquid-background">
+      <div class="liquid-blob blob-1"></div>
+      <div class="liquid-blob blob-2"></div>
+      <div class="liquid-blob blob-3"></div>
+    </div>
+
+    <!-- Main App Container -->
+    <div id="app">
+      <!-- View 1: Landing -->
+      <section id="landing-view" class="view">
+        <div class="logo">🎵</div>
+
+        <div class="main-action">
+          <button id="connect-spotify" class="btn-spotify">
+            <svg
+              class="spotify-logo"
+              viewBox="0 0 24 24"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path
+                d="M12 0C5.4 0 0 5.4 0 12s5.4 12 12 12 12-5.4 12-12S18.66 0 12 0zm5.521 17.34c-.24.359-.66.48-1.021.24-2.82-1.74-6.36-2.101-10.561-1.141-.418.122-.779-.179-.899-.539-.12-.421.18-.78.54-.9 4.56-1.021 8.52-.6 11.64 1.32.42.18.479.659.301 1.02zm1.44-3.3c-.301.42-.841.6-1.262.3-3.239-1.98-8.159-2.58-11.939-1.38-.479.12-1.02-.12-1.14-.6-.12-.48.12-1.021.6-1.141C9.6 9.9 15 10.561 18.72 12.84c.361.181.54.78.241 1.2zm.12-3.36C15.24 8.4 8.82 8.16 5.16 9.301c-.6.179-1.2-.181-1.38-.721-.18-.601.18-1.2.72-1.381 4.26-1.26 11.28-1.02 15.721 1.621.539.3.719 1.02.419 1.56-.299.421-1.02.599-1.559.3z"
+                fill="currentColor"
+              />
+            </svg>
+            <span class="btn-text">Conectar con Spotify</span>
+          </button>
+
+          <div class="upload-area">
+            <p class="upload-hint">o importa una imagen de tu playlist</p>
+
+            <div class="dropzone" id="dropzone">
+              <input type="file" id="file-input" accept="image/*" />
+              <div class="dropzone-content">
+                <div class="dropzone-icon">🖼️</div>
+                <div class="dropzone-text">Arrastra o haz clic para subir</div>
+                <div class="dropzone-subtext">
+                  Analisis visual con Google AI
+                </div>
+              </div>
+            </div>
+
+            <div class="preview-container" id="preview-container">
+              <img id="preview-image" class="preview-image" alt="Preview" />
+              <button class="remove-image" id="remove-image">✕ Remover</button>
+            </div>
+          </div>
+
+          <!-- Manual Search -->
+          <div class="search-container">
+            <div class="search-divider">
+              <span>o busca una canción</span>
+            </div>
+
+            <div class="search-box">
+              <span class="search-icon">🔍</span>
+              <input
+                type="text"
+                id="song-search"
+                placeholder="Escribe el nombre de una canción..."
+                autocomplete="off"
+              />
+            </div>
+
+            <div id="search-results" class="search-results hidden">
+              <!-- Results populated by JS -->
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- View 2: Loading -->
+      <section id="loading-view" class="view hidden">
+        <div class="spinner"></div>
+        <h2>Analizando tu universo sonoro...</h2>
+        <p class="progress-text pulse" id="progress-text">
+          Conectando con Spotify
+        </p>
+      </section>
+
+      <!-- View 3: Results -->
+      <section id="results-view" class="view hidden">
+        <div class="mystic-card">
+          <h2 class="profile-title" id="profile-title">
+            El Arquitecto de Frecuencias
+          </h2>
+
+          <div class="stat-grid" id="stats-grid">
+            <!-- Stats will be populated by JS -->
+          </div>
+
+          <div class="insights" id="insights">
+            <!-- AI insights will be populated by JS -->
+          </div>
+        </div>
+
+        <button id="generate-image" class="btn btn-primary">
+          📸 Crear Imagen para Stories
+        </button>
+
+        <button id="analyze-again" class="btn btn-glass">
+          🔄 Analizar de Nuevo
+        </button>
+      </section>
+
+      <!-- View 4: Share -->
+      <section id="share-view" class="view hidden">
+        <h2>Tu Imagen Lista</h2>
+        <canvas id="share-canvas"></canvas>
+
+        <div
+          style="
+            display: flex;
+            gap: var(--space-md);
+            flex-wrap: wrap;
+            justify-content: center;
+          "
+        >
+          <button id="download-image" class="btn btn-primary">
+            💾 Descargar
+          </button>
+          <button id="back-to-results" class="btn btn-glass">← Volver</button>
+        </div>
+      </section>
+    </div>
+
+    <script type="module" src="/src/main.js"></script>
+  </body>
+</html>

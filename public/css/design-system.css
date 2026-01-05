@@ -1,0 +1,388 @@
+/* ===========================================
+   MUSIC ORACLE - iOS 26 DESIGN SYSTEM
+   Crystalmorphism & Liquified Art Engine
+   =========================================== */
+
+/* ========== CSS VARIABLES ========== */
+:root {
+  /* === Primary Palette === */
+  --hue-primary: 280; /* Purple mystique */
+  --hue-accent: 180; /* Cyan tech */
+  --hue-warm: 30; /* Gold warmth */
+
+  /* === Brand Colors === */
+  --color-background: hsl(240, 20%, 8%);
+  --color-surface: hsl(240, 15%, 12%);
+  --color-primary: hsl(var(--hue-primary), 70%, 60%);
+  --color-accent: hsl(var(--hue-accent), 65%, 55%);
+  --color-text: hsl(0, 0%, 95%);
+  --color-text-dim: hsl(0, 0%, 70%);
+  --blob-opacity: 0.3;
+
+  /* === Typography (Global) === */
+  --font-display: 'Playfair Display', serif;
+  --font-body: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+  --font-mono: "SF Mono", "Courier New", monospace;
+}
+
+/* === Theme: Light Mode === */
+:root[data-theme="light"] {
+  --color-background: hsl(240, 30%, 97%);
+  --color-surface: hsl(240, 20%, 93%);
+  --color-primary: hsl(var(--hue-primary), 70%, 50%);
+  --color-accent: hsl(var(--hue-accent), 65%, 45%);
+  --color-text: hsl(0, 0%, 10%);
+  --color-text-dim: hsl(0, 0%, 35%);
+  --blob-opacity: 0.2;
+
+  /* === Glass Effects === */
+  --glass-blur: 24px;
+  --glass-tint: hsla(240, 15%, 15%, 0.65);
+  --glass-border: hsla(0, 0%, 100%, 0.12);
+  --glass-shadow: 0 8px 32px hsla(0, 0%, 0%, 0.4);
+
+  /* === Liquid Gradients === */
+  --gradient-primary: linear-gradient(
+    135deg,
+    hsl(var(--hue-primary), 70%, 60%) 0%,
+    hsl(var(--hue-accent), 65%, 55%) 100%
+  );
+  --gradient-accent: linear-gradient(
+    135deg,
+    hsl(var(--hue-accent), 65%, 55%) 0%,
+    hsl(var(--hue-primary), 70%, 60%) 100%
+  );
+
+  /* === Spacing System === */
+  --space-xs: 0.5rem;
+  --space-sm: 1rem;
+  --space-md: 2rem; /* Increased from 1.5rem */
+  --space-lg: 3rem;
+  --space-xl: 5rem;
+  --landing-offset: -5vh; /* Lift content */
+
+
+
+  /* === Border Radius === */
+  --radius-sm: 8px;
+  --radius-md: 16px;
+  --radius-lg: 24px;
+  --radius-xl: 32px;
+
+  /* === Transitions === */
+  --transition-fast: 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+  --transition-smooth: 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  --transition-slow: 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+
+  /* === Z-Index Layers === */
+  --z-background: -1;
+  --z-base: 0;
+  --z-content: 10;
+  --z-overlay: 100;
+  --z-modal: 1000;
+}
+
+/* ========== RESET & BASE ========== */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  font-size: 16px;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+body {
+  font-family: var(--font-body);
+  color: var(--color-text);
+  background-color: var(--color-background);
+  line-height: 1.6;
+  overflow-x: hidden;
+  min-height: 100vh;
+}
+
+input, button, textarea, select {
+  font-family: inherit;
+}
+
+/* ========== TYPOGRAPHY ========== */
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  font-family: var(--font-display);
+  font-weight: 700;
+  line-height: 1.2;
+  letter-spacing: -0.02em;
+}
+
+h1 {
+  font-size: clamp(2.5rem, 5vw, 4rem);
+  background: var(--gradient-primary);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+h2 {
+  font-size: clamp(2rem, 4vw, 3rem);
+}
+
+h3 {
+  font-size: clamp(1.5rem, 3vw, 2rem);
+}
+
+p {
+  font-size: 1rem;
+  color: var(--color-text-dim);
+}
+
+.text-glow {
+  text-shadow: 0 0 20px currentColor;
+}
+
+/* ========== LIQUIFIED BACKGROUND ========== */
+.liquid-background {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: var(--z-background);
+  overflow: hidden;
+  background: var(--color-background);
+}
+
+.liquid-blob {
+  position: absolute;
+  border-radius: 50%;
+  filter: blur(90px);
+  opacity: var(--blob-opacity);
+  animation: 14s infinite ease-in-out;
+  will-change: transform;
+}
+
+.blob-1 {
+  width: 550px;
+  height: 550px;
+  background: hsl(var(--hue-primary), 75%, 65%);
+  top: -15%;
+  left: -15%;
+  animation-name: float-blob-1;
+  animation-delay: 0s;
+}
+
+.blob-2 {
+  width: 450px;
+  height: 450px;
+  background: hsl(var(--hue-accent), 70%, 60%);
+  bottom: -15%;
+  right: -15%;
+  animation-name: float-blob-2;
+  animation-delay: -4s;
+}
+
+.blob-3 {
+  width: 400px;
+  height: 400px;
+  background: hsl(var(--hue-warm), 65%, 55%);
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  animation-name: float-blob-3;
+  animation-delay: -8s;
+}
+
+@keyframes float-blob-1 {
+  0%, 100% {
+    transform: translate(0, 0) scale(1) rotate(0deg);
+  }
+  33% {
+    transform: translate(50px, -40px) scale(1.15) rotate(120deg);
+  }
+  66% {
+    transform: translate(-30px, 30px) scale(0.85) rotate(240deg);
+  }
+}
+
+@keyframes float-blob-2 {
+  0%, 100% {
+    transform: translate(0, 0) scale(1) rotate(0deg);
+  }
+  33% {
+    transform: translate(-40px, 50px) scale(0.9) rotate(-120deg);
+  }
+  66% {
+    transform: translate(35px, -35px) scale(1.1) rotate(-240deg);
+  }
+}
+
+@keyframes float-blob-3 {
+  0%, 100% {
+    transform: translate(-50%, -50%) scale(1) rotate(0deg);
+  }
+  33% {
+    transform: translate(-45%, -55%) scale(1.2) rotate(90deg);
+  }
+  66% {
+    transform: translate(-55%, -48%) scale(0.88) rotate(180deg);
+  }
+}
+
+/* ========== GLASS MORPHISM ========== */
+.glass {
+  background: var(--glass-tint);
+  backdrop-filter: blur(var(--glass-blur));
+  -webkit-backdrop-filter: blur(var(--glass-blur));
+  border: 1px solid var(--glass-border);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--glass-shadow);
+}
+
+.glass-card {
+  background: var(--glass-tint);
+  backdrop-filter: blur(var(--glass-blur));
+  -webkit-backdrop-filter: blur(var(--glass-blur));
+  border: 1px solid var(--glass-border);
+  border-radius: var(--radius-lg);
+  padding: var(--space-lg);
+  box-shadow: var(--glass-shadow);
+  transition: transform var(--transition-smooth);
+}
+
+.glass-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 12px 48px hsla(0, 0%, 0%, 0.5);
+}
+
+/* ========== BUTTONS ========== */
+.btn {
+  font-family: var(--font-display);
+  font-size: 1rem;
+  font-weight: 600;
+  padding: var(--space-sm) var(--space-lg);
+  border: none;
+  border-radius: var(--radius-md);
+  cursor: pointer;
+  transition: all var(--transition-smooth);
+  position: relative;
+  overflow: hidden;
+  outline: none;
+}
+
+.btn-primary {
+  background: var(--gradient-primary);
+  color: white;
+  box-shadow: 0 4px 16px hsla(var(--hue-primary), 70%, 60%, 0.4);
+}
+
+.btn-primary:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 24px hsla(var(--hue-primary), 70%, 60%, 0.6);
+}
+
+.btn-primary:active {
+  transform: translateY(0);
+}
+
+.btn-glass {
+  background: var(--glass-tint);
+  backdrop-filter: blur(var(--glass-blur));
+  -webkit-backdrop-filter: blur(var(--glass-blur));
+  border: 1px solid var(--glass-border);
+  color: var(--color-text);
+}
+
+.btn-glass:hover {
+  background: hsla(240, 15%, 20%, 0.75);
+  border-color: var(--color-primary);
+}
+
+/* ========== LOADERS ========== */
+.spinner {
+  width: 48px;
+  height: 48px;
+  border: 4px solid var(--glass-border);
+  border-top-color: var(--color-primary);
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.pulse {
+  animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+}
+
+@keyframes pulse {
+  0%,
+  100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.5;
+  }
+}
+
+/* ========== UTILITY CLASSES ========== */
+.hidden {
+  display: none !important;
+}
+
+.flex-center {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.flex-col {
+  display: flex;
+  flex-direction: column;
+}
+
+.gap-sm {
+  gap: var(--space-sm);
+}
+.gap-md {
+  gap: var(--space-md);
+}
+.gap-lg {
+  gap: var(--space-lg);
+}
+
+.text-center {
+  text-align: center;
+}
+.text-gradient {
+  background: var(--gradient-primary);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+/* ========== RESPONSIVE ========== */
+@media (max-width: 768px) {
+  :root {
+    --space-lg: 1.5rem;
+    --space-xl: 2rem;
+  }
+
+  .glass-card {
+    padding: var(--space-md);
+  }
+
+  .liquid-blob {
+    filter: blur(60px);
+  }
+}
