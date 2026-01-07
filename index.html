@@ -76,9 +76,6 @@
       #landing-view .logo {
         font-size: 10rem;
         user-select: none;
-        position: relative;
-        -webkit-text-stroke: 4px rgba(255, 255, 255, 0.08);
-        text-shadow: 0 0 0 rgba(0, 0, 0, 0.45), 0 0 12px rgba(0, 0, 0, 0.35);
         animation: pulseglow 3.5s infinite ease-in-out;
       }
 
@@ -89,23 +86,11 @@
           filter: drop-shadow(0 0 35px hsl(var(--hue-primary), 70%, 60%))
             drop-shadow(0 0 70px hsl(var(--hue-primary), 70%, 60%));
         }
-        12.5% {
-          transform: scale(1.01);
-          opacity: 0.98;
-          filter: drop-shadow(0 0 38px hsl(var(--hue-primary), 72%, 62%))
-            drop-shadow(0 0 76px hsl(var(--hue-primary), 72%, 62%));
-        }
         25% {
           transform: scale(1.02);
           opacity: 0.95;
           filter: drop-shadow(0 0 40px hsl(var(--hue-primary), 75%, 65%))
             drop-shadow(0 0 80px hsl(var(--hue-primary), 75%, 65%));
-        }
-        37.5% {
-          transform: scale(1.03);
-          opacity: 0.94;
-          filter: drop-shadow(0 0 42px hsl(var(--hue-primary), 76%, 63%))
-            drop-shadow(0 0 84px hsl(var(--hue-primary), 76%, 63%));
         }
         50% {
           transform: scale(1.04);
@@ -113,23 +98,11 @@
           filter: drop-shadow(0 0 45px hsl(var(--hue-accent), 65%, 55%))
             drop-shadow(0 0 90px hsl(var(--hue-accent), 65%, 55%));
         }
-        62.5% {
-          transform: scale(1.03);
-          opacity: 0.94;
-          filter: drop-shadow(0 0 42px hsl(var(--hue-primary), 76%, 63%))
-            drop-shadow(0 0 84px hsl(var(--hue-primary), 76%, 63%));
-        }
         75% {
           transform: scale(1.02);
           opacity: 0.95;
           filter: drop-shadow(0 0 40px hsl(var(--hue-primary), 75%, 65%))
             drop-shadow(0 0 80px hsl(var(--hue-primary), 75%, 65%));
-        }
-        87.5% {
-          transform: scale(1.01);
-          opacity: 0.98;
-          filter: drop-shadow(0 0 38px hsl(var(--hue-primary), 72%, 62%))
-            drop-shadow(0 0 76px hsl(var(--hue-primary), 72%, 62%));
         }
         100% {
           transform: scale(1);
@@ -147,7 +120,10 @@
         width: 100%;
       }
 
-      /* Spotify Button */
+      /* Spotify Button - Hidden by default for Guest Focus */
+      #connect-spotify {
+        display: none !important;
+      }
       .btn-spotify {
         width: 100%;
         max-width: 380px;
@@ -170,6 +146,62 @@
         gap: 0.75rem;
         position: relative;
         overflow: hidden;
+      }
+
+      /* Optimized Spinner with Nebula Glow */
+      /* Optimized Spinner with Nebula Glow (Oráculo Style) */
+      .spinner {
+        width: 80px;
+        height: 80px;
+        background: radial-gradient(
+          circle,
+          var(--color-primary) 0%,
+          transparent 70%
+        );
+        border-radius: 50%;
+        filter: blur(10px);
+        opacity: 0.8;
+        transform: scale(0.8);
+        animation: breathe 3s ease-in-out infinite;
+        box-shadow: 0 0 40px var(--color-primary), 0 0 80px var(--color-accent);
+      }
+
+      @keyframes breathe {
+        0%,
+        100% {
+          transform: scale(0.8);
+          opacity: 0.6;
+          filter: blur(10px);
+        }
+        50% {
+          transform: scale(1.2);
+          opacity: 1;
+          filter: blur(20px);
+        }
+      }
+
+      @keyframes spin {
+        0% {
+          transform: rotate(0deg);
+        }
+        100% {
+          transform: rotate(360deg);
+        }
+      }
+
+      .pulse {
+        animation: pulse 3s ease-in-out infinite;
+        will-change: opacity;
+      }
+
+      @keyframes pulse {
+        0%,
+        100% {
+          opacity: 0.6;
+        }
+        50% {
+          opacity: 1;
+        }
       }
 
       .btn-spotify::before {
@@ -309,30 +341,17 @@
       }
 
       /* === Search Component === */
+      /* Removed Divider for Clean Look */
+      .search-divider {
+        display: none;
+      }
+
       .search-container {
         width: 100%;
-        max-width: 380px;
-        margin-top: var(--space-md);
+        max-width: 420px; /* Slightly wider */
+        margin-top: var(--space-lg);
         position: relative;
-      }
-
-      .search-divider {
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        margin-bottom: var(--space-sm);
-        color: var(--color-text-dim);
-        font-size: 0.8rem;
-        opacity: 0.7;
-      }
-
-      .search-divider::before,
-      .search-divider::after {
-        content: "";
-        height: 1px;
-        background: var(--glass-border);
-        flex: 1;
-        margin: 0 var(--space-sm);
+        z-index: 50; /* Ensure it stays on top */
       }
 
       .search-box {
@@ -541,15 +560,43 @@
     </style>
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <!-- Apple-like System Fonts: Inter (San Francisco alt) & Playfair Display (Titles) -->
     <link
-      href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400;1,700&family=Inter:wght@400;500;600;800&display=swap"
+      href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&family=Inter:wght@300;400;500;600;800&family=Space+Grotesk:wght@400;600&display=swap"
       rel="stylesheet"
     />
   </head>
   <body>
     <!-- Theme Toggle -->
     <div class="theme-toggle" id="theme-toggle" title="Toggle theme">
-      <span id="theme-icon">🌙</span>
+      <span id="theme-icon">☀️</span>
+    </div>
+
+    <!-- Language Selector -->
+    <div
+      class="lang-toggle"
+      id="lang-toggle"
+      title="Change language"
+      style="
+        position: fixed;
+        top: var(--space-lg);
+        right: calc(var(--space-lg) + 70px);
+        z-index: var(--z-overlay);
+        background: var(--glass-tint);
+        backdrop-filter: blur(var(--glass-blur));
+        -webkit-backdrop-filter: blur(var(--glass-blur));
+        border: 1px solid var(--glass-border);
+        border-radius: 50px;
+        padding: 0.5rem 1rem;
+        font-size: 0.875rem;
+        font-weight: 600;
+        color: var(--color-text);
+        cursor: pointer;
+        transition: all var(--transition-smooth);
+        user-select: none;
+      "
+    >
+      <span id="lang-label">ES</span>
     </div>
 
     <!-- Liquified Background -->
@@ -577,30 +624,10 @@
                 fill="currentColor"
               />
             </svg>
-            <span class="btn-text">Conectar con Spotify</span>
+            <span class="btn-text">Analizar mi Perfil (Login)</span>
           </button>
 
-          <div class="upload-area">
-            <p class="upload-hint">o importa una imagen de tu playlist</p>
-
-            <div class="dropzone" id="dropzone">
-              <input type="file" id="file-input" accept="image/*" />
-              <div class="dropzone-content">
-                <div class="dropzone-icon">🖼️</div>
-                <div class="dropzone-text">Arrastra o haz clic para subir</div>
-                <div class="dropzone-subtext">
-                  Analisis visual con Google AI
-                </div>
-              </div>
-            </div>
-
-            <div class="preview-container" id="preview-container">
-              <img id="preview-image" class="preview-image" alt="Preview" />
-              <button class="remove-image" id="remove-image">✕ Remover</button>
-            </div>
-          </div>
-
-          <!-- Manual Search -->
+          <!-- Search Container: Visible on Landing -->
           <div class="search-container">
             <div class="search-divider">
               <span>o busca una canción</span>
@@ -626,10 +653,11 @@
       <!-- View 2: Loading -->
       <section id="loading-view" class="view hidden">
         <div class="spinner"></div>
-        <h2>Analizando tu universo sonoro...</h2>
-        <p class="progress-text pulse" id="progress-text">
-          Conectando con Spotify
-        </p>
+        <p
+          class="progress-text pulse"
+          id="progress-text"
+          style="display: none"
+        ></p>
       </section>
 
       <!-- View 3: Results -->
@@ -676,6 +704,21 @@
           <button id="back-to-results" class="btn btn-glass">← Volver</button>
         </div>
       </section>
+      <!-- Hidden Export Container (Off-screen) -->
+      <!-- Fixed size for HD Story: 1080x1920 -->
+      <div
+        id="export-container"
+        style="
+          position: fixed;
+          left: -9999px;
+          top: 0;
+          width: 1080px;
+          height: 1920px;
+          z-index: -1;
+        "
+      >
+        <!-- JS will inject .story-export-card here -->
+      </div>
     </div>
 
     <script type="module" src="/src/main.js"></script>
